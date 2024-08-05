@@ -107,3 +107,22 @@ body {
     font-size: 10px;
   }
 }
+.img {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+}
+.mygithup {
+  padding: 10px 10px 10px 10px;
+  display: flex;
+  justify-content: start;
+  gap: 60px;
+  align-items: center;
+  background-color: #eee;
+  border-radius: 6px;
+  border: #ddd solid 2px;
+  margin-bottom: 20px;
+}
+.mygithup i {
+    margin-left: 10px;
+}
