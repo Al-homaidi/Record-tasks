@@ -17,12 +17,12 @@ submit.onclick = function () {
 
 tasksDiv.addEventListener("click", (e) => {
   if (e.target.classList.contains("del")) {
-    deleteTaskWith(e.target.parentElement.getAttribute("data-id"));
-    e.target.parentElement.remove();
-  };
-  if (e.target.classList.contains("task")) {
-    toggleStatusTaskWith(e.target.getAttribute("data-id"));
-    e.target.classList.toggle("done");
+    deleteTaskWith(e.target.parentElement.parentElement.getAttribute("data-id"));
+    e.target.parentElement.parentElement.remove();
+  }
+  if (e.target.classList.contains("mham")) {
+    toggleStatusTaskWith(e.target.parentElement.parentElement.getAttribute("data-id"));
+    e.target.parentElement.parentElement.classList.toggle("done");
   }
 });
 
@@ -41,19 +41,36 @@ function addElementsToPageFrom(arrayOftasks) {
   tasksDiv.innerHTML = "";
   arrayOftasks.forEach((task) => {
     let div = document.createElement("div");
-    div.className = "task";
-    if (task.completed) {
-      div.className = "task done";
-    }
-    div.setAttribute("data-id", task.id)
-    div.appendChild(document.createTextNode(task.title));
-    let span = document.createElement("span");
-    span.className = "del";
-    span.appendChild(document.createTextNode("Delete"));
-    div.appendChild(span);
+    div.className = task.completed ? "task done" : "task";
+    div.setAttribute("data-id", task.id);
+
+    let textmain = document.createElement("div");
+    textmain.className = "textmain";
+    let ptwxt = document.createElement("p");
+    ptwxt.className = "ptwxt";
+    ptwxt.appendChild(document.createTextNode(task.title));
+    textmain.appendChild(ptwxt);
+
+    let buttons = document.createElement("div");
+    buttons.className = "buttons";
+
+    let spanDel = document.createElement("span");
+    spanDel.className = "del";
+    spanDel.appendChild(document.createTextNode("حذف المهمة"));
+
+    let spanComplete = document.createElement("span");
+    spanComplete.className = "mham";
+    spanComplete.appendChild(document.createTextNode("تم انجاز المهمة"));
+
+    buttons.appendChild(spanDel);
+    buttons.appendChild(spanComplete);
+
+    div.appendChild(textmain);
+    div.appendChild(buttons);
+
     tasksDiv.appendChild(div);
   });
-};
+}
 
 function addDataToLocalStorageFrom(arrayOftasks) {
   window.localStorage.setItem("tasks", JSON.stringify(arrayOftasks));
@@ -65,11 +82,6 @@ function getDataFromLocalStorage() {
     let tasks = JSON.parse(data);
     addElementsToPageFrom(tasks);
   }
-};
-
-function deleteTaskWith(taskId) {
-  arrayOftasks = arrayOftasks.filter((task) => task.id != taskId);
-  addDataToLocalStorageFrom(arrayOftasks);
 }
 
 function deleteTaskWith(taskId) {
@@ -80,7 +92,7 @@ function deleteTaskWith(taskId) {
 function toggleStatusTaskWith(taskId) {
   for (let i = 0; i < arrayOftasks.length; i++) {
     if (arrayOftasks[i].id == taskId) {
-      arrayOftasks[i].completed == false ? (arrayOftasks[i].completed = true) : (arrayOftasks[i].completed = false);
+      arrayOftasks[i].completed = !arrayOftasks[i].completed;
     }
   }
   addDataToLocalStorageFrom(arrayOftasks);
